@@ -15,7 +15,7 @@ class MedicalDocumentResource extends JsonResource
             'record_date' => $this->record_date,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'files' => MedicalFileResource::collection($this->files),
+            'files' => MedicalFileResource::collection($this->medicalFiles),
         ];
     }
 }

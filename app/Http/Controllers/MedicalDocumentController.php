@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\ApiResponse;
 use App\Http\Resources\MedicalDocumentResource;
 use App\Models\MedicalDocument;
 use App\Models\MedicalFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpFoundation\Response;
 
 
 class MedicalDocumentController extends Controller
@@ -20,7 +20,7 @@ class MedicalDocumentController extends Controller
     {
         $data = MedicalDocument::all();
 
-        return (MedicalDocumentResource::collection($data))->response()->setStatusCode(200);
+        return (MedicalDocumentResource::collection($data))->response()->setStatusCode(Response::HTTP_OK);
     }
 
     /**
@@ -56,7 +56,7 @@ class MedicalDocumentController extends Controller
             }
         }
 
-        return 'new MedicalDocumentResource($document)';
+        return (new MedicalDocumentResource($document))->response()->setStatusCode(Response::HTTP_CREATED);
     }
 
         /**
@@ -64,7 +64,7 @@ class MedicalDocumentController extends Controller
      */
     public function show(MedicalDocument $medicalDocument)
     {
-        return new MedicalDocumentResource($medicalDocument);
+        return (new MedicalDocumentResource($medicalDocument))->response()->setStatusCode(Response::HTTP_OK);
     }
 
     /**
@@ -100,7 +100,7 @@ class MedicalDocumentController extends Controller
             }
         }
 
-        return new MedicalDocumentResource($medicalDocument);
+        return (new MedicalDocumentResource($medicalDocument))>response()->setStatusCode(Response::HTTP_OK);
     }
 
     /**
@@ -108,13 +108,14 @@ class MedicalDocumentController extends Controller
      */
     public function destroy(MedicalDocument $medicalDocument)
     {
-        foreach ($medicalDocument->files as $file) {
+        if($medicalDocument->medicalFiles)
+        foreach ($medicalDocument->medicalFiles as $file) {
             Storage::disk('public')->delete($file->file_path);
             $file->delete();
         }
 
         $medicalDocument->delete();
 
-        return response()->json(null, 204);
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 }
