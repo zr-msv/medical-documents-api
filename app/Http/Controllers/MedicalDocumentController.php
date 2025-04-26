@@ -100,7 +100,7 @@ class MedicalDocumentController extends Controller
             }
         }
 
-        return (new MedicalDocumentResource($medicalDocument))>response()->setStatusCode(Response::HTTP_OK);
+        return (new MedicalDocumentResource($medicalDocument))->response()->setStatusCode(Response::HTTP_OK);
     }
 
     /**
