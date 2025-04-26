@@ -12,8 +12,8 @@ docker-compose build app
 docker-compose up -d
 
 
-//make sure docker is runnig
-	docker ps
+//make sure docker is runnig:
+docker ps
 
 ---
 docker exec -it medical-app-container bash
